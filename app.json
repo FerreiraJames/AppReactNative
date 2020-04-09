@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "App",
-    "slug": "App",
+    "name": "ChatApp",
+    "slug": "ChatApp",
     "platforms": [
       "ios",
       "android",

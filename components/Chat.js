@@ -1,11 +1,50 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {connect} from 'react-redux';
+import {Text, View, StyleSheet, FlatList, TextInput, Button} from 'react-native';
+import { MessageItem } from './MessageItem';
 
-export class Chat extends React.Component{
-    render(){
-        return(
-            <View style={styles.container}>
-                <Text style={[styles.h1, styles.textBlue]}>Chat Screen</Text>
+@connect (({chat:
+                {user,
+                room,
+                messages,
+                error}
+}) => ({user, room, messages, error}))
+export class Chat extends React.Component {
+
+getData() {
+    const {messages } = this.props;
+    return messages.map((message, i) => ({
+        ...message, key: `message_${i}`
+    }));
+}
+
+    render() {
+        const {user, error} = this.props;
+
+        return (
+            <View style = {styles.container}>              
+                {error &&
+                <Text>Error: {error.message}</Text>
+                }
+                <FlatList style={styles.list}
+                    data={this.getData()}
+                    renderItem={({ item: message})=>
+                        <MessageItem user={user} message={message} />
+                    }                
+                />
+
+                <View style={styles.composerContainer}>
+                    <TextInput
+                      
+                        style={styles.composerInput}
+                        placeholder="Saisir un message"
+                    />
+
+                    <Button
+                    title="Envoyer !"                   
+                    />
+                </View>              
+
             </View>
         );
     }
@@ -14,12 +53,22 @@ export class Chat extends React.Component{
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#FFF',
-      alignItems: 'center',
       justifyContent: 'center',
+      backgroundColor: '#EEE'
     },
-    h1: {
-      fontSize: 20
+    list:{
+        flex: 1
     },
-    textBlue: {color: 'blue' }
+    composerContainer: {
+        flex: 0,
+        flexDirection: 'row',
+        
+        
+    },
+    composerInput: {
+        flex: 1,
+        backgroundColor: 'white',
+        paddingLeft: 8,
+        paddingRight: 8
+    }
   });
